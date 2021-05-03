@@ -58,7 +58,7 @@ const getRandomOfferType = () => {
   return OfferType[offerTypes[Math.floor(Math.random() * offerTypes.length)]];
 };
 
-const generateOffers = (count, titles, categories, sentences) => (
+const generateOffers = (count, {titles, categories, sentences}) => (
   [...Array(count)].map(() => ({
     title: getRandomItem(titles),
     picture: generatePictureTitle(),
@@ -69,6 +69,13 @@ const generateOffers = (count, titles, categories, sentences) => (
   }))
 );
 
+const getTemplates = async () => {
+  const sentences = await readContent(FILE_SENTENCES_PATH);
+  const titles = await readContent(FILE_TITLES_PATH);
+  const categories = await readContent(FILE_CATEGORIES_PATH);
+  return {sentences, titles, categories};
+};
+
 module.exports = {
   name: `--generate`,
   async run(args) {
@@ -78,10 +85,8 @@ module.exports = {
       console.info(chalk.red(`Не больше ${MAX_COUNT} элементов.`));
       process.exit(EXIT_CODES.error);
     }
-    const sentences = await readContent(FILE_SENTENCES_PATH);
-    const titles = await readContent(FILE_TITLES_PATH);
-    const categories = await readContent(FILE_CATEGORIES_PATH);
-    const content = JSON.stringify(generateOffers(countOffer, titles, categories, sentences));
+    const templates = await getTemplates();
+    const content = JSON.stringify(generateOffers(countOffer, templates));
 
     try {
       await fs.writeFile(FILE_NAME, content);
