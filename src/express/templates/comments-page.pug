@@ -1,0 +1,24 @@
+extends ./layout.pug
+
+block content
+    main.page-content
+        section.comments
+            .comments__wrapper
+                if offersWithComments && offersWithComments.length
+                    h1.visually-hidden Страница комментариев
+                    each offerWithComments in offersWithComments
+                        - var offer = offerWithComments.offer
+                        - var comments = offerWithComments.comments
+                        .comments__block
+                            .comments__header
+                                a.announce-card(href='#')
+                                    h2.announce-card__title
+                                        = offer.title
+                                    span.announce-card__info
+                                        span.announce-card__price ₽ 
+                                            = offer.price
+                                        span.announce-card__type
+                                            = offer.label
+                            include ./comments/comments-list.pug
+                else
+                    p.comments__message У ваших публикаций еще нет комментариев.

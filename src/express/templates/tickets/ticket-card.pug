@@ -1,0 +1,23 @@
+div.ticket-card.ticket-card--color06
+    div.ticket-card__img
+        img(src=item.image srcset=item.alternativeImage alt='Изображение товара')
+    div.ticket-card__info
+        span.ticket-card__label
+            =item.label
+        div.ticket-card__categories
+            each category in item.categories
+                a(href='#')
+                    =category.title
+        div.ticket-card__header
+            h3.ticket-card__title
+                a(href='#')
+                    =item.title
+            p.ticket-card__price
+                span.js-sum
+                    =item.price
+                    |  ₽
+        block description
+            div.ticket-card__desc
+                p
+                =item.description
+    block actions

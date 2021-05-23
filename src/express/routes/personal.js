@@ -1,10 +1,20 @@
 'use strict';
-
 const {Router} = require(`express`);
-const {showRequestPath} = require(`../handlers/route-handler`);
+const { TEMPLATES_FOR_ROUTES } = require('./constants');
+const { myOffersList, myOffersWithComments } = require(`../data`);
+
 const personalRoutes = new Router();
 
-personalRoutes.get(`/`, showRequestPath);
-personalRoutes.get(`/comments`, showRequestPath);
+personalRoutes.get(`/`, (req, res) => {
+    res.render(TEMPLATES_FOR_ROUTES.myTickets, {
+        ticketsList: myOffersList,
+    });
+});
+
+personalRoutes.get(`/comments`, (req, res) => {
+    res.render(TEMPLATES_FOR_ROUTES.myComments, {
+        offersWithComments: myOffersWithComments
+    });
+});
 
 module.exports = personalRoutes;

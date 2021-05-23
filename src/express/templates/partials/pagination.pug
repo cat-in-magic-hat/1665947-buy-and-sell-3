@@ -1,0 +1,11 @@
+if pages > 1
+    - var pagesArr = [...Array(pages).keys()]
+    div.tickets-list__pagination
+        ul.pagination
+            each page in pagesArr
+                li
+                    a(href='#' class=currentPage == page ? 'active' : '')
+                        =page+1
+            if(hasMore)
+                li
+                    a(href='#') дальше
