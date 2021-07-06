@@ -13,10 +13,10 @@ block content
                         =category.title
                         b.js-qty
                             =items.length
-            ul
-                each item in items
-                    li.tickets-list__item
-                        include ./tickets/ticket-card.pug
+                ul
+                    each item in items
+                        li.tickets-list__item
+                            include ./tickets/ticket-card.pug
             
-            include ./partials/pagination.pug       
+                include ./partials/pagination.pug       
     
