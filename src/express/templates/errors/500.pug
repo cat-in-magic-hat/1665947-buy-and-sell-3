@@ -1,0 +1,10 @@
+extends ../layout.pug
+
+block body
+    body.body-server
+        main 
+            section(section class="error")
+                h1.error__title 500
+                h2.error__subtitle Ошибка cервера
+                include error-page-content.pug
+        include ../partials/scripts-bottom.pug

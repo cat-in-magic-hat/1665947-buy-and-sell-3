@@ -1,0 +1,22 @@
+extends layout.pug
+
+block content
+    main.page-content
+        =category.Title 
+        include ./categories/categories-list.pug
+        section.tickets-list
+            h2.visually-hidden Предложения из категории 
+                =category.title
+            div.tickets-list__wrapper
+                div.tickets-list__header
+                    p.tickets-list__title
+                        =category.title
+                        b.js-qty
+                            =items.length
+                ul
+                    each item in items
+                        li.tickets-list__item
+                            include ./tickets/ticket-card.pug
+            
+                include ./partials/pagination.pug       
+    

@@ -1,0 +1,14 @@
+section.tickets-list
+    h2.visually-hidden
+        = ticketsList.hiddenTitle
+    .tickets-list__wrapper
+        .tickets-list__header
+            p.tickets-list__title
+                = ticketsList.title
+            if ticketsList.moreItemsAmount 
+                a.tickets-list__link(href='#') Еще 
+                    =ticketsList.moreItemsAmount
+        ul
+            each item in ticketsList.items
+                li.tickets-list__item
+                    include ./ticket-card.pug

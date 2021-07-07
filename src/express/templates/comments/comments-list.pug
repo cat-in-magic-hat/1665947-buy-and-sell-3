@@ -1,0 +1,13 @@
+ul.comments-list
+    each comment in comments
+        li.js-card
+            .comment-card
+                .comment-card__header
+                    a.comment-card__avatar.avatar(href='#')
+                        img(src=comment.author.avatar srcset=comment.author.avatarAlternative alt='Аватар пользователя')
+                    p.comment-card__author
+                    =comment.author.name
+                .comment-card__content
+                    p
+                    =comment.text
+                button.comment-card__delete.js-delete(type='button') Удалить

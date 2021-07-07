@@ -1,0 +1,14 @@
+extends layout.pug
+
+block content
+  main.page-content
+    section.tickets-list
+      h2.visually-hidden Самые новые предложения
+      .tickets-list__wrapper
+        .tickets-list__header
+          a.tickets-list__btn.btn.btn--big(href='/offers/add')
+            span Новая публикация
+        ul
+            each item in ticketsList
+                li.tickets-list__item
+                    include ./tickets/auth-ticket-card.pug
