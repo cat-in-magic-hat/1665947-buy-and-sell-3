@@ -1,7 +1,5 @@
 'use strict';
-
-const chalk = require(`chalk`);
-const http = require(`http`);
+const express = require(`express`);
 const fs = require(`fs`).promises;
 const {HTTP_CODE} = require(`../../constants`);
 
@@ -9,55 +7,31 @@ const DEFAULT_PORT = 3000;
 const FILENAME = `mocks.json`;
 const notFoundMessageText = `К сожалению, не найдено ни одного объявления`;
 
-const onClientConnect = async (req, res) => {
-  switch (req.url) {
-    case `/`:
-      try {
-        const fileContent = await fs.readFile(FILENAME);
-        const mocks = JSON.parse(fileContent);
-        sendResponse(res, HTTP_CODE.OK, getOffersPageBody(mocks));
-      } catch (err) {
-        sendNotFoundResult(res);
-      }
-      break;
-    default:
-      sendNotFoundResult(res);
-      break;
-  }
+const configureRoutes = (app) => {
+  app.get(`/offers`, async (req, res) => {
+    try {
+      const fileContent = await fs.readFile(FILENAME);
+      const mocks = JSON.parse(fileContent);
+      res.json(mocks);
+    } catch (err) {
+      res.status(HTTP_CODE.INTERNAL_SERVER_ERROR).send(err);
+    }
+  });
+
+  app.use((req, res) => res
+    .status(HTTP_CODE.NOT_FOUND)
+    .send(notFoundMessageText));
 };
 
-const sendNotFoundResult = (response) => sendResponse(response, HTTP_CODE.NOT_FOUND, notFoundMessageText);
-
-const sendResponse = (response, statusCode, message) => {
-  response.statusCode = statusCode;
-  response.writeHead(statusCode, {'Content-Type': `text/html; charset=UTF-8`});
-  response.end(renderTemplate(message));
-};
-
-const getOffersPageBody = (offers) => {
-  return `<ul>${offers.map((post) => `<li>${post.title}</li>`).join(``)}</ul>`;
-};
-
-const renderTemplate = (body) => `<!Doctype html>
-<html lang="ru">
-<head>
-  <title>Offers List</title>
-</head>
-<body>${body}</body>
-</html>`.trim();
 
 module.exports = {
   name: `--server`,
   run(args) {
     const [customPort] = args;
     const port = Number.parseInt(customPort, 10) || DEFAULT_PORT;
-    http.createServer(onClientConnect)
-        .listen(port)
-        .on(`listening`, (err) => {
-          if (err) {
-            return console.error(chalk.red(`Attempt to create server failed`), err);
-          }
-          return console.info(chalk.green(`Waiting connection on port ${port}`));
-        });
+    const app = express();
+    app.use(express.json());
+    configureRoutes(app);
+    app.listen(port);
   }
 };
